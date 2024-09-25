@@ -3,73 +3,79 @@ import time
 import os
 import dirscanner
 from threading import Thread
+import threading
 
 RecevingFile = False
-fileChanged = 0
+fileChanged = False
 activationTime = 0
 Waiting = True
+printing = False
 WaitingText = "Waiting for new file"
 WaitingLength = 23
-RecevingText = "Recevinng File"
+RecevingText = "Receving File"
 RecevingLength = 19
 
-class FileScanner(Thread):
-    def __init__(self):
-        Thread.__init__(self)
-        self.daemon = True
-        self.start()
-    def run(self):
-        global Waiting, WaitingText, WaitingLength, RecevingLength, RecevingText, activationTime, fileChanged, RecevingFile
-        while True:
-            if dirscanner.detect_file_changes("test.jpg") == True:
-                Waiting = False
-                activationTime = time.time()
-                fileChanged = 1
-                RecevingFile = True
-                if len(RecevingText) >= RecevingLength:
+
+def filescan():
+    global Waiting, WaitingText, WaitingLength, RecevingLength, RecevingText, activationTime, fileChanged, RecevingFile
+    while True:
+        if dirscanner.detect_file_changes("test.jpg") == True:
+            Waiting = False
+            activationTime = time.time()
+            fileChanged = True
+        else:
+            pass
+         
+def Print():
+    global fileChanged
+    global activationTime
+    global Waiting
+    global printing
+    while True:
+        time.sleep(1)
+        currentTime = time.time()
+        if fileChanged == True:
+                if (currentTime-activationTime) >= 5:
+                    printing = True
                     os.system('cls' if os.name == 'nt' else 'clear')
-                    RecevingText = "Receving File"
-                    print(RecevingText)
-                else:
-                    os.system('cls' if os.name == 'nt' else 'clear')
-                    RecevingText += '.'
-                    print(RecevingText)
-            if dirscanner.detect_file_changes("test.jpg") == False and Waiting == True:
-                RecevingFile = False
-                if len(WaitingText) >= WaitingLength:
-                    os.system('cls' if os.name == 'nt' else 'clear')
-                    WaitingText = "Waiting for new file"
-                    print(WaitingText)
-                else:
-                    os.system('cls' if os.name == 'nt' else 'clear')
-                    WaitingText += '.'
-                    print(WaitingText)
+                    print("Prepairing to print")
+                    printer.Print(r"C:\SMB\test.jpg")
+                    activationTime = 0
+                    fileChanged = False
+                    printing = False
+                    Waiting = True
+        else:
+            pass
 
 
-class PrintFile(Thread):
-    def __init__(self):
-        Thread.__init__(self)
-        self.daemon = True
-        self.start()          
-    def run(self):
-            global fileChanged
-            global activationTime
-            global Waiting
-            while True:
-                currentTime = time.time()
-                if fileChanged == 1:
-                    if (currentTime-activationTime) >= 1.5:
-                        os.system('cls' if os.name == 'nt' else 'clear')
-                        print("Prepairing to print")
-                        printer.PrntNoFail(r"C:\SMB\test.jpg")
-                        activationTime = 0
-                        fileChanged = 0
-                        Waiting = True
-                        
-
-
-FileScanner()
-PrintFile()
+thread1 = Thread(target=filescan)
+thread2 = Thread(target=Print)
+Thread.start(thread1)
+Thread.start(thread2)
 
 while True:
-    pass
+    if fileChanged == False and Waiting == True:
+        if len(WaitingText) >= WaitingLength:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            WaitingText = "Waiting for new file"
+            print(WaitingText)
+        else:
+            WaitingText += '.'
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print(WaitingText)
+        time.sleep(1)
+
+    if fileChanged == True and printing == False:
+        if len(RecevingText) >= RecevingLength:
+            RecevingText = "Receving File"
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print (RecevingText)
+        else:
+            RecevingText += '.'
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print(RecevingText)
+        time.sleep(1)
+    
+
+
+
