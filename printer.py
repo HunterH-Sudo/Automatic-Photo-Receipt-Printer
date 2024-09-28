@@ -6,7 +6,13 @@ testing = True
 PrinterIP = "192.168.100.2"
 
 def Print(image):
-    p = printer.Network(PrinterIP, profile="TM-T88V", timeout=10)
+    try:
+        print("Trying to connect to: " + PrinterIP)
+        p = printer.Network(PrinterIP, profile="TM-T88V", timeout=3)
+    except:
+        print("Couldn't connect to printer")
+        time.sleep(3)
+        return
     width, height = Image.open(image).size
     if height < width:
         image = Image.open(image).rotate(90,expand=True)
@@ -16,7 +22,7 @@ def Print(image):
         width, height = image.size
 
     image.thumbnail((512,height))
-    p.image(image)
+    p.image(image,impl="grahics")
     p.cut()
     p.close()
 

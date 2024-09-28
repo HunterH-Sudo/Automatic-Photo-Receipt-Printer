@@ -35,7 +35,7 @@ def Print():
         time.sleep(1)
         currentTime = time.time()
         if fileChanged == True:
-                if (currentTime-activationTime) >= 5:
+                if (currentTime-activationTime) >= 3:
                     printing = True
                     os.system('cls' if os.name == 'nt' else 'clear')
                     print("Prepairing to print")
