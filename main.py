@@ -1,4 +1,4 @@
-import printer
+import pri nter
 import time 
 import os
 import dirscanner
@@ -19,7 +19,7 @@ RecevingLength = 19
 def filescan(): #Configue directoy scanner and trigger for printer
     global Waiting, WaitingText, WaitingLength, RecevingLength, RecevingText, activationTime, fileChanged, RecevingFile
     while True:
-        if dirscanner.detect_file_changes("test.jpg") == True:
+        if dirscanner.detect_file_changes(r"C:\SMB\test.jpg") == True:
             Waiting = False
             activationTime = time.time()
             fileChanged = True
@@ -55,23 +55,23 @@ while True: # Simple loop to print what script is currently working on
 
     if fileChanged == False and Waiting == True: # Only run when waiting for file
         if len(WaitingText) >= WaitingLength: # If string is too long reset it
-            os.system('cls' if os.name == 'nt' else 'clear')
+            #os.system('cls' if os.name == 'nt' else 'clear')
             WaitingText = "Waiting for new file"
             print(WaitingText)
         else: # Print WaitingText and add dot to the end
             WaitingText += '.'
-            os.system('cls' if os.name == 'nt' else 'clear')
+            #os.system('cls' if os.name == 'nt' else 'clear')
             print(WaitingText)
         time.sleep(1)
 
     if fileChanged == True and printing == False: # Only run when receving a file
         if len(RecevingText) >= RecevingLength: # If string is too long reset it
             RecevingText = "Receving File"
-            os.system('cls' if os.name == 'nt' else 'clear')
+            #os.system('cls' if os.name == 'nt' else 'clear')
             print (RecevingText)
         else: #Print ReceingText and add dot to the end
             RecevingText += '.'
-            os.system('cls' if os.name == 'nt' else 'clear')
+            #os.system('cls' if os.name == 'nt' else 'clear')
             print(RecevingText)
         time.sleep(1)
     

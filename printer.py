@@ -22,10 +22,9 @@ def Print(image):
         width, height = image.size
 
     image.thumbnail((512,height))
-    p.image(image,impl="grahics")
+    p.image(image)
     p.cut()
     p.close()
-
 
 
 
