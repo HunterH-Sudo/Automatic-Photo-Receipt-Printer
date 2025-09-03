@@ -1,11 +1,11 @@
 from escpos import *
 from PIL import Image
-import os
 import time
-testing = True
-PrinterIP = "192.168.100.2"
 
-def Print(image):
+#PrinterIP = "192.168.100.2"
+
+
+def Print(image, PrinterIP):
     try:
         print("Trying to connect to: " + PrinterIP)
         p = printer.Network(PrinterIP, profile="TM-T88V", timeout=3)
@@ -20,11 +20,7 @@ def Print(image):
     else:
         image = Image.open(image)
         width, height = image.size
-
     image.thumbnail((512,height))
     p.image(image)
     p.cut()
     p.close()
-
-
-
