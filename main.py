@@ -107,8 +107,3 @@ while True: # Simple loop to print what script is currently working on
         spinner_animation("Receiving new file", counter)
         counter += 1
         time.sleep(0.2)
-
-    
-
-
-
